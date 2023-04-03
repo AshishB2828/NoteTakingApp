@@ -17,14 +17,28 @@ body {
   margin-bottom: 60px;
 }
 .note-box {
-    width: 800px;
     border: 1px solid;
     border-radius: 5px;
     padding: 25px;
+}
+.note-search, .note-box, .note-addnew {
+    width: 800px;
 }
 .note-img {
     width: 100%
 }
 .note-attachments{
     
+}
+
+.pagination{
+
+}
+
+.pagination a{
+    border: 1px solid ;
+    padding: 5px;
+}
+.pagination a.active {
+    background: gray
 }

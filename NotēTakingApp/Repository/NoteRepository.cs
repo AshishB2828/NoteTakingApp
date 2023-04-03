@@ -3,6 +3,7 @@ using NoteTakingApp.Models;
 using NoteTakingApp.Models.DTO;
 using NoteTakingApp.Repository.interfaces;
 using System;
+using System.Linq;
 
 namespace NoteTakingApp.Repository
 {
@@ -103,22 +104,60 @@ namespace NoteTakingApp.Repository
             return noteDto;
         }
 
-        public  List<NoteDto> GetAllNotes(int currentUserId)
+        public NoteList GetAllNotes(NoteSearchParams searchParams, int currentUserId, int cpage)
         {
-            var notesInDb = _appContext.Notes.Where(x => x.CreatedBy == currentUserId)
-                                .Select(note => new NoteDto
-                                        {
-                                            CreatedAt = note.CreatedAt,
-                                            CreatedBy   = note.CreatedBy,
-                                            FileName = note.FileName,
-                                            NoteId = note.NoteId,
-                                            Notes = note.Notes,
-                                            Tags = note.Tags,
-                                            Title = note.Title
-                                        })
-                                .OrderBy(x => x.CreatedAt)        
-                                .ToList();
-            return notesInDb;
+            if (cpage == 0)
+            {
+                cpage = 1;
+            }
+
+            var notesInDbQuery = _appContext.Notes.Where(x => x.CreatedBy == currentUserId);
+                              
+
+            if (!string.IsNullOrEmpty(searchParams.SearchTitle))
+            {
+                notesInDbQuery = notesInDbQuery.Where(i => i.Title.ToLower().Contains(searchParams.SearchTitle.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(searchParams.SearchTag))
+            {
+                notesInDbQuery = notesInDbQuery.Where(i => i.Tags.ToLower().Contains(searchParams.SearchTag.ToLower()));
+            }
+            int itemPerPage = 2;
+            int totalItems =notesInDbQuery.Count();
+
+            int totalPages = (int)Math.Ceiling(totalItems / (double)itemPerPage);
+
+
+            //notesInDbQuery = notesInDbQuery.Skip(cpage - 1).Take(itemPerPage);
+            int skip = (cpage - 1) * itemPerPage;
+            if(cpage > 0)
+            {
+                notesInDbQuery = notesInDbQuery.Skip(skip).Take(itemPerPage);
+            }
+            notesInDbQuery = notesInDbQuery.Take(itemPerPage);
+
+            var notesInDb = notesInDbQuery
+                             .Select(note => new NoteDto
+                             {
+                                 CreatedAt = note.CreatedAt,
+                                 CreatedBy = note.CreatedBy,
+                                 FileName = note.FileName,
+                                 NoteId = note.NoteId,
+                                 Notes = note.Notes,
+                                 Tags = note.Tags,
+                                 Title = note.Title
+                             })
+                            .OrderBy(x => x.CreatedAt)
+                            
+                                                .ToList();
+
+
+            var listWithPagination = new NoteList 
+                            { Notes = notesInDb, CurrentPage = cpage, 
+                              PageSize = itemPerPage, TotalPage = totalPages, 
+                            SearchTag = searchParams.SearchTag, SearchTitle = searchParams.SearchTitle 
+            };
+            return listWithPagination;
         }
     }
 }

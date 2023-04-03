@@ -4,7 +4,7 @@
 
 
 <div class="container">
-    <a asp-action="Notes" asp-controller="Index"><i class="fa fa-arrow-left"></i> Back</a>
+    <a class="btn btn-secondary my-2" asp-action="Index" asp-controller="Notes"><i class="fa fa-arrow-left"></i> Back</a>
    @if(ViewBag.pageMode == "Add" || ViewBag.PageMode == "Edit") {
         <div class="mx-auto mt-4 w-75">
             <form action="">

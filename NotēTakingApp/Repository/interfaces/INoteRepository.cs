@@ -9,7 +9,7 @@ namespace NoteTakingApp.Repository.interfaces
         NoteDto UpdateNote(NoteDto note, int currentUser);
         NoteDto DeleteNote(int id);
         NoteDto GetNote(int id);
-        List<NoteDto> GetAllNotes(int currentUserId);
+        NoteList GetAllNotes(NoteSearchParams searchParams, int currentUserId, int cpage);
         bool IsUserAllowedToModify(int noteId, int userId);
 
     }

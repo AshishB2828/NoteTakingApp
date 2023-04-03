@@ -1,12 +1,35 @@
 ﻿@using NoteTakingApp.Models.DTO
-@model List<NoteDto>
+@model NoteList
 
-<a title="add" class="btn btn-primary" href="/Notes/AddEditView?pageMode=Add&id=0"><i class="fa fa-plus"></i>Add New</a>
 
+<div class="row py-2 border-bottom my-2">
+     <form method="get" class="note-search mx-auto ">
+         <div class="row">
+             <div class="col">
+                <input class="form-control" placeholder="title" type="text" name="title" id="title"  />
+             </div>
+              <div class="col">
+                <input class="form-control" placeholder="tag" type="text" name="tag" id="tag" />
+             </div>
+         </div>
+         <div class="row my-2">
+             <div class="col d-flex justify-content-end gap-1">
+                <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+             </div>
+         </div>
+     </form>
+</div>
+
+<div class="row">
+    <div class="mx-auto note-addnew">
+        <a title="add" class="btn btn-primary" href="/Notes/AddEditView?pageMode=Add&id=0"><i class="fa fa-plus"></i>Add New</a>
+    </div>
+</div>
 
 <div class="my-3 w-100">
     <div class="w-100">
-    @foreach (var note in Model)
+    @foreach (var note in Model.Notes)
     {
             <div class="note-box mx-auto my-2">
             <div class="note-title"><h4>@note.Title</h4></div>
@@ -26,7 +49,20 @@
             </div>
         </div>
     }
-    @if(@Model.Count() == 0) {
+
+
+    <div class="pagination my-2 d-flex justify-content-center gap-1">
+        @for (int i = 1; i <= Model.TotalPage; i++)
+            {
+                if(i == Model.CurrentPage) {
+                    <a class="active" href="/Notes/Index?cpage=@Model.CurrentPage&title=@Model.SearchTitle&tag=@Model.SearchTag">@i</a>
+                }else{
+                    <a href="/Notes/Index?cpage=@i&title=@Model.SearchTitle&tag=@Model.SearchTag">@i</a>
+                }
+            }
+    </div>
+
+    @if(@Model.Notes.Count() == 0) {
         <h1>No notes</h1>
     }
     </div>

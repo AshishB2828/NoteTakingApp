@@ -17,9 +17,10 @@ namespace NoteTakingApp.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? title, string? tag, [FromQuery]int? cpage)
         {
-            List<NoteDto> allNotes = _noteRepository.GetAllNotes(1);
+            var searchParams = new NoteSearchParams { SearchTitle = title, SearchTag = tag };
+            var allNotes = _noteRepository.GetAllNotes(searchParams, 1, cpage??0);
             return View(allNotes);
         }
 
