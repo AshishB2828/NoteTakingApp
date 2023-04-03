@@ -1,0 +1,33 @@
+﻿@using NoteTakingApp.Models.DTO
+@model List<NoteDto>
+
+<a title="add" class="btn btn-primary" href="/Notes/AddEditView?pageMode=Add&id=0"><i class="fa fa-plus"></i>Add New</a>
+
+
+<div class="my-3 w-100">
+    <div class="w-100">
+    @foreach (var note in Model)
+    {
+            <div class="note-box mx-auto">
+            <div class="note-title"><h4>@note.Title</h4></div>
+            <div class="note-body">
+
+                <p>@(note.Notes.Length > 200 ? note.Notes.Substring(0, 200) + "....." : note.Notes)</p>
+
+                @if (!string.IsNullOrEmpty(note.FileName))
+                {
+                        <a class="note-attachments"><i class="fa fa-picture-o" style="color:green"></i> file :- @note.FileName</a>
+                }
+            </div>
+                <div class="note-tags">Tags : <b><i>@note.Tags</i></b></div>
+            <div class="note-footer my-2">
+                    <a class="btn btn-warning" title="edit" href="/Notes/AddEditView?pageMode=Edit&id=@note.NoteId"><i class="fa fa-pencil"></i></a>
+                    <a class="btn btn-primary" title="view" href="/Notes/AddEditView?pageMode=View&id=@note.NoteId"> <i class="fa fa-trash"></i></a>
+            </div>
+        </div>
+    }
+    @if(@Model.Count() == 0) {
+        <h1>No notes</h1>
+    }
+    </div>
+</div>

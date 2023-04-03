@@ -1,0 +1,30 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.note-box {
+    width: 800px;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 25px;
+}
+.note-img {
+    width: 100%
+}
+.note-attachments{
+    
+}

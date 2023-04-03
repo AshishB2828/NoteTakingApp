@@ -1,0 +1,119 @@
+﻿@using NoteTakingApp.Models.DTO
+@model NoteDto
+
+
+
+<div class="container">
+    
+   @if(ViewBag.pageMode == "Add" || ViewBag.PageMode == "Edit") {
+        <div class="mx-auto mt-4 w-75">
+            <form action="">
+                <div class="row g-3">
+                    <div class="col">
+                        <input type="text" asp-for="@Model.Title" id="title" class="form-control" placeholder="Title" aria-label="Title">
+                    </div>
+                </div>
+
+                <div class="row g-3 my-3">
+                    <div class="col">
+
+                        <textarea name="note"
+                              asp-for="@Model.Notes"
+                              cols="30" rows="10"
+                              class="form-control"
+                              id="note"
+                              placeholder="Add notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="row my-3 g-3">
+                    <div class="col-6">
+                        <input type="file" class="form-control" id="file" asp-for="@Model.FileName">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" id="tags" asp-for="@Model.Tags" placeholder="tag1,tag2...">
+                    </div>
+                </div>
+                <div class="row">
+                    @if (!string.IsNullOrEmpty(Model.FileName))
+                    {
+                        <img src="/images/@Model.FileName" width="200" height="200" />
+                    }
+                </div>
+                <div class="row my-3">
+                    <div class="col text-center">
+                        <button type="button" onclick="AddEditNote()" class="btn-success btn w-100">
+                            @(Model.NoteId == 0 ? "Add" : "Edit")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+   }else{
+       <h4>@Model.Title</h4>
+       <p>@Model.Notes</p>
+        <p>Tags : <b>@Model.Tags</b></p>
+       <p>@Model.CreatedAt.ToString()</p>
+
+        <div class="row">
+            @if (!string.IsNullOrEmpty(Model.FileName))
+            {
+                <img src="/images/@Model.FileName" width="200" height="200" />
+            }
+        </div>
+   }
+</div>
+
+<script>
+
+    let selectedNoteFile = null; 
+    $("#file").on('change', function (e) {
+        selectedNoteFile = e.target.files[0]
+    })
+
+    function AddEditNote() {
+        let title = $("#title").val();
+        let tags = $("#tags").val();
+        let note = $("#note").val();
+      
+
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("notes", note);
+        formData.append("tags", tags);
+        formData.append("noteId", @Model.NoteId);
+        formData.append("file", selectedNoteFile);
+        formData.append("fileName", '@Model.FileName');
+
+        $.ajax({
+            url: "/Notes/UpsertNotes",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                console.log(res)
+                if (res.isSuccess) {
+                Swal.fire({
+                    title: 'Success',
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    denyButtonText: '',
+                }).then(result => {
+                        window.location.href = "/Notes/Index"
+
+                });
+            }},
+            error: function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            }
+        });
+    }
+</script>
+
