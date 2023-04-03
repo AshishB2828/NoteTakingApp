@@ -8,7 +8,7 @@
     <div class="w-100">
     @foreach (var note in Model)
     {
-            <div class="note-box mx-auto">
+            <div class="note-box mx-auto my-2">
             <div class="note-title"><h4>@note.Title</h4></div>
             <div class="note-body">
 
@@ -22,7 +22,7 @@
                 <div class="note-tags">Tags : <b><i>@note.Tags</i></b></div>
             <div class="note-footer my-2">
                     <a class="btn btn-warning" title="edit" href="/Notes/AddEditView?pageMode=Edit&id=@note.NoteId"><i class="fa fa-pencil"></i></a>
-                    <a class="btn btn-primary" title="view" href="/Notes/AddEditView?pageMode=View&id=@note.NoteId"> <i class="fa fa-trash"></i></a>
+                    <a class="btn btn-primary" title="view" href="/Notes/AddEditView?pageMode=View&id=@note.NoteId"> <i class="fa fa-eye"></i></a>
             </div>
         </div>
     }
