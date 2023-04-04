@@ -3,7 +3,7 @@
 
 
 <div class="row py-2 border-bottom my-2">
-     <form method="get" class="note-search mx-auto ">
+     <form method="get" class="note-search mx-auto " id="form-note-search">
          <div class="row">
              <div class="col">
                 <input class="form-control" placeholder="title" type="text" name="title" id="title"  />
@@ -15,7 +15,7 @@
          <div class="row my-2">
              <div class="col d-flex justify-content-end gap-1">
                 <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
-                <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-danger" onclick="ClearNoteSearch()" type="button"><i class="fa fa-trash"></i></button>
              </div>
          </div>
      </form>
@@ -46,6 +46,7 @@
             <div class="note-footer my-2">
                     <a class="btn btn-warning" title="edit" href="/Notes/AddEditView?pageMode=Edit&id=@note.NoteId"><i class="fa fa-pencil"></i></a>
                     <a class="btn btn-primary" title="view" href="/Notes/AddEditView?pageMode=View&id=@note.NoteId"> <i class="fa fa-eye"></i></a>
+                    <a class="btn btn-danger" title="delete" onclick="DeleteNote(@note.NoteId)" >  <i class="fa fa-trash"></i></a>
             </div>
         </div>
     }
@@ -67,3 +68,67 @@
     }
     </div>
 </div>
+
+<script>
+
+    function ClearNoteSearch() {
+        $("#tag").val('');
+        $("#title").val('');
+        var searchForm = $("#form-note-search");
+        searchForm.submit();
+    }
+
+    function DeleteNote(noteId) {
+
+        Swal.fire({
+            title: '',
+            icon: 'info',
+            html:
+                'Are you sure you want to delete this record?',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonColor: 'red',
+            cancelButtonColor: 'blue',
+            confirmButtonText:
+                '<i class="fa fa-trash"></i> Delete!',
+            //confirmButtonAriaLabel: 'Thumbs up, great!',
+            cancelButtonText:
+                '<i class="fa fa-ban"></i> Cancel',
+            //cancelButtonAriaLabel: 'Thumbs down',
+            
+        }).then(result =>{
+            if (result.isConfirmed) {
+                DeleteNoteAjax(noteId)
+            }
+        })  
+    }
+
+
+    function DeleteNoteAjax(noteId) {
+        
+        $.ajax({
+            url: "/Notes/DeleteNote",
+            type: "POST",
+            data: { noteId },
+            success: function (res) {
+                console.log(res);
+                if(res.isSuccess) {
+                    window.location.reload();
+                }
+            },
+            error: function (err) {
+                console.log(err)
+                Swal.fire({
+                    title: '',
+                    icon: 'error',
+                    html:'Something went wrong',
+                    focusConfirm: false,
+                    confirmButtonText:'Ok'
+
+                })
+            }
+        });
+
+    }
+</script>
