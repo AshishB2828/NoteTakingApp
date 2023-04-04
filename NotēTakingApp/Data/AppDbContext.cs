@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NoteTakingApp.Models;
 
 namespace NoteTakingApp.Data
 {
     
-        public class AppDbContext : DbContext
+        public class AppDbContext : IdentityDbContext<ApplicationUser>
         {
 
             public AppDbContext(DbContextOptions options) : base(options)
@@ -13,6 +14,7 @@ namespace NoteTakingApp.Data
             }
 
             public DbSet<Note> Notes { get; set; }
+            public DbSet<ApplicationUser> Users { get; set; }
         }
     
 }

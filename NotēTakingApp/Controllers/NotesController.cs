@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoteTakingApp.Models;
 using NoteTakingApp.Models.DTO;
 using NoteTakingApp.Repository.interfaces;
 
 namespace NoteTakingApp.Controllers
 {
+    [Authorize]
     public class NotesController : Controller
     {
 

@@ -1,0 +1,59 @@
+﻿@using NoteTakingApp.Models.DTO
+@model RegistartionData
+
+
+<div class="container">
+    <div class="card mx-auto p-4" style="width: 400px">
+        <div class="row text-center"><h3>Register</h3></div>
+
+        @if(TempData["Msg"]!=null){
+            <div>
+                <br/>
+                <p class="text-danger">@TempData["Msg"]</p>
+            </div>
+        }
+        <form method="post">
+            <div class="row">
+                <div class="row">
+                    <div class="col my-3">
+                        <input type="text" asp-for="@Model.Name" class="form-control" placeholder="name" />
+                        <span class="text-danger my-1" asp-validation-for="Name"></span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" asp-for="@Model.Email" class="form-control" placeholder="Email" />
+                        <span class="text-danger my-1" asp-validation-for="Email"></span>
+
+                    </div>
+             </div>
+                <div class="row my-3">
+                <div class="col">
+                    <input type="password" asp-for="@Model.Password" class="form-control" placeholder="Password" />
+                        <span class="text-danger my-1" asp-validation-for="Password"></span>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="text" asp-for="@Model.ConfirmPassword" class="form-control" placeholder="Confirm password" />
+                        <span class="text-danger my-1" asp-validation-for="ConfirmPassword"></span>
+
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col">
+                        <button type="submit" class="btn btn-primary btn-sm float-end">Register</button>
+                </div>
+            </div>
+        </form>
+        <p>Already have an account? <a href="/auth/login">login</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

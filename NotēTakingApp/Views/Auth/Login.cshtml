@@ -1,0 +1,41 @@
+﻿@using NoteTakingApp.Models.DTO
+@model LoginData
+
+
+<div class="container">
+    <div class="card mx-auto p-4" style="width: 400px">
+        <div class="row text-center"><h3>Login</h3></div>
+        @if (TempData["Msg"] != null)
+        {
+            <div>
+                <br />
+                <p class="text-danger">@TempData["Msg"]</p>
+            </div>
+        }
+        <form method="post">
+            <div class="row">
+                <div class="col">
+                    <input type="text" asp-for="@Model.Email"  class="form-control" placeholder="Email"/>
+                    <span class="text-danger my-1" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col">
+                    <input type="password" asp-for="@Model.Password" class="form-control" placeholder="Password" />
+                    <span class="text-danger my-1" asp-validation-for="Password"></span>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary btn-sm float-end">Login</button>
+                </div>
+            </div>
+        </form>
+        <p>Don't have an account? <a href="/auth/register">register</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
