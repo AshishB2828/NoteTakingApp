@@ -22,7 +22,9 @@
                               cols="30" rows="10"
                               class="form-control"
                               id="note"
-                              placeholder="Add notes..."></textarea>
+                              placeholder="Add notes...">
+                          
+                          </textarea>
                     </div>
                 </div>
 
@@ -51,7 +53,7 @@
         </div>
    }else{
        <h4>@Model.Title</h4>
-       <p>@Model.Notes</p>
+        <p>@Html.Raw(Model.Notes)</p>
         <p><i class="fa fa-tags"></i> Tags : <b>@Model.Tags</b></p>
        <p>@Model.CreatedAt.ToString()</p>
 

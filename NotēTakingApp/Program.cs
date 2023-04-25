@@ -32,6 +32,12 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseStatusCodePagesWithReExecute("/Home/HandleError/{0}");
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
