@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NoteTakingApp.Models;
 using NoteTakingApp.Models.DTO;
 using NoteTakingApp.Repository.interfaces;
+using System.Security.Claims;
 
 namespace NoteTakingApp.Controllers
 {
@@ -12,18 +13,26 @@ namespace NoteTakingApp.Controllers
 
         private readonly INoteRepository _noteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public NotesController(INoteRepository noteRepository, IWebHostEnvironment webHostEnvironment)
+        public NotesController(INoteRepository noteRepository, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor contextAccessor)
         {
             _noteRepository = noteRepository;
             _webHostEnvironment = webHostEnvironment;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Index(string? title, string? tag, [FromQuery]int? cpage)
         {
             var searchParams = new NoteSearchParams { SearchTitle = title, SearchTag = tag };
-            var allNotes = _noteRepository.GetAllNotes(searchParams, 1, cpage??0);
+            string userId = GetCurrentLoggedInUserId();
+            var allNotes = _noteRepository.GetAllNotes(searchParams, userId, cpage??0);
             return View(allNotes);
+        }
+
+        private string GetCurrentLoggedInUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         [HttpGet]
@@ -39,9 +48,11 @@ namespace NoteTakingApp.Controllers
                
                  if(pageMode == "Edit" || pageMode =="View")
                 {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                     if (pageMode == "Edit")
                     {
-                        var isAllowed = _noteRepository.IsUserAllowedToModify(id, 1);
+                        var isAllowed = _noteRepository.IsUserAllowedToModify(id, userId);
                         if (!isAllowed) return RedirectToAction("Index");
                     }
                     noteData = _noteRepository.GetNote(id);
@@ -67,19 +78,20 @@ namespace NoteTakingApp.Controllers
                 fileName = SaveImage(file);
                 noteDto.FileName = fileName;
             }
+            string userId = GetCurrentLoggedInUserId();
 
-            if(noteDto.NoteId ==0)
+            if (noteDto.NoteId ==0)
             {
                 //Create New Note
 
-                var note = _noteRepository.CreateNote(noteDto, 1);
+                var note = _noteRepository.CreateNote(noteDto, userId);
                 response.ResponseData = note;
                 response.IsSuccess = true;
 
             }
             else
             {
-                var isAllowed = _noteRepository.IsUserAllowedToModify(noteDto.NoteId, 1);
+                var isAllowed = _noteRepository.IsUserAllowedToModify(noteDto.NoteId, userId);
                 if(!isAllowed)
                 {
                     response.IsSuccess = false;
@@ -89,7 +101,7 @@ namespace NoteTakingApp.Controllers
                 }
                 else
                 {
-                    var updatedNote = _noteRepository.UpdateNote(noteDto, 1);
+                    var updatedNote = _noteRepository.UpdateNote(noteDto, userId);
                     response.ResponseData = updatedNote;
                     response.IsSuccess = true;
                 }
@@ -103,8 +115,9 @@ namespace NoteTakingApp.Controllers
         [HttpPost]
         public IActionResult DeleteNote(int noteId)
         {
+            string userId = GetCurrentLoggedInUserId();
             AjaxResponse response = new AjaxResponse();
-            var isAllowed = _noteRepository.IsUserAllowedToModify(noteId, 1);
+            var isAllowed = _noteRepository.IsUserAllowedToModify(noteId, userId);
             if (!isAllowed)
             {
                 response.IsSuccess = false;

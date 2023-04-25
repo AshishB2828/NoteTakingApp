@@ -16,7 +16,7 @@ namespace NoteTakingApp.Repository
             _appContext = appContext;
         }
 
-        public NoteDto CreateNote(NoteDto note, int currentUser)
+        public NoteDto CreateNote(NoteDto note, string currentUser)
         {
             Note newNote = new Note
             {
@@ -75,14 +75,14 @@ namespace NoteTakingApp.Repository
             return noteDto;
         }
 
-        public bool IsUserAllowedToModify(int noteId, int userId)
+        public bool IsUserAllowedToModify(int noteId, string userId)
         {
             var noteInDb = _appContext.Notes.FirstOrDefault(x => x.NoteId == noteId);
             if (noteInDb == null) return false;
             return noteInDb.CreatedBy == userId;
         }
 
-        public NoteDto UpdateNote(NoteDto note, int currentUser)
+        public NoteDto UpdateNote(NoteDto note, string currentUser)
         {
             var noteInDb = _appContext.Notes.FirstOrDefault(x => x.NoteId == note.NoteId);
             if (noteInDb == null) return null;
@@ -104,7 +104,7 @@ namespace NoteTakingApp.Repository
             return noteDto;
         }
 
-        public NoteList GetAllNotes(NoteSearchParams searchParams, int currentUserId, int cpage)
+        public NoteList GetAllNotes(NoteSearchParams searchParams, string currentUserId, int cpage)
         {
             if (cpage == 0)
             {
