@@ -1,7 +1,10 @@
 ﻿@using NoteTakingApp.Models.DTO
 @model NoteDto
 
-
+<script>
+    var NoteId = @Model.NoteId
+    var NoteFileName = '@Model.FileName'
+</script>
 
 <div class="container">
     <a class="btn btn-secondary my-2" asp-action="Index" asp-controller="Notes"><i class="fa fa-arrow-left"></i> Back</a>
@@ -66,6 +69,8 @@
    }
 </div>
 
+<script src="~/js/Notes/noteaddeditview.js"></script>
+@*
 <script>
 
     let selectedNoteFile = null; 
@@ -119,3 +124,4 @@
     }
 </script>
 
+*@
