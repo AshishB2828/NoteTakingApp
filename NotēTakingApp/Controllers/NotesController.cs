@@ -25,6 +25,12 @@ namespace NoteTakingApp.Controllers
 
         public IActionResult Index(string? title, string? tag, [FromQuery]int? cpage)
         {
+            ViewBag.Title = "";
+            ViewBag.Tag = "";
+
+            if (!string.IsNullOrEmpty(title)) ViewBag.Title = title;
+            if (!string.IsNullOrEmpty(tag)) ViewBag.Tag= tag;
+
             var searchParams = new NoteSearchParams { SearchTitle = title, SearchTag = tag };
             string userId = GetCurrentLoggedInUserId();
             var allNotes = _noteRepository.GetAllNotes(searchParams, userId, cpage??0);

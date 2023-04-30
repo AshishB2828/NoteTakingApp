@@ -6,10 +6,10 @@
      <form method="get" class="note-search mx-auto " id="form-note-search">
          <div class="row">
              <div class="col">
-                <input class="form-control" placeholder="title" type="text" name="title" id="title"  />
+                <input class="form-control" value="@ViewBag.Title" placeholder="Search by title...." type="text" name="title" id="title"  />
              </div>
               <div class="col">
-                <input class="form-control" placeholder="tag" type="text" name="tag" id="tag" />
+                <input class="form-control" value="@ViewBag.Tag" placeholder="Search by tag..." type="text" name="tag" id="tag" />
              </div>
          </div>
          <div class="row my-2">

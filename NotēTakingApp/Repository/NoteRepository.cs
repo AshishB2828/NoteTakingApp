@@ -122,7 +122,7 @@ namespace NoteTakingApp.Repository
             {
                 notesInDbQuery = notesInDbQuery.Where(i => i.Tags.ToLower().Contains(searchParams.SearchTag.ToLower()));
             }
-            int itemPerPage = 2;
+            int itemPerPage = 3;
             int totalItems =notesInDbQuery.Count();
 
             int totalPages = (int)Math.Ceiling(totalItems / (double)itemPerPage);
