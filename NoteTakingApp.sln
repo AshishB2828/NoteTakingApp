@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTakingApp", "NotēTakingApp\NoteTakingApp.csproj", "{0ADE98DC-3B38-45F7-B079-359F03C3F29F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTakingApp", "NotēTakingApp\NoteTakingApp.csproj", "{0ADE98DC-3B38-45F7-B079-359F03C3F29F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScreenShots", "ScreenShots", "{5711134F-2217-46D6-AEF1-18A255151D6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
