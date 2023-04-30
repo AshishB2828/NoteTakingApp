@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using NoteTakingApp.Models;
 using NoteTakingApp.Models.DTO;
 using NoteTakingApp.Repository.interfaces;
@@ -132,6 +133,28 @@ namespace NoteTakingApp.Controllers
                 response.ResponseMessage = "Success";
             }
             return Json(response);
+        }
+
+
+        public IActionResult OpenFile(string filename)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", filename);
+             
+            if (!System.IO.File.Exists(filePath))
+            {
+                return Content("<h1>File Not Found</h1>");
+            }
+            string contentType;
+            new FileExtensionContentTypeProvider().TryGetContentType(filename, out contentType);
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+           
+            return File(memory, contentType, filename);
         }
 
         [NonAction]

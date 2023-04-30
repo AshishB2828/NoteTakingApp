@@ -56,19 +56,32 @@
         </div>
    }else{
        <h4>@Model.Title</h4>
-        <p>@Html.Raw(Model.Notes)</p>
         <p><i class="fa fa-tags"></i> Tags : <b>@Model.Tags</b></p>
        <p>@Model.CreatedAt.ToString()</p>
-
+       <br/>
+        <p>@Html.Raw(Model.Notes)</p>
+       <br/>
+       <h4>Attachment</h4>
+       <br/>
         <div class="row">
+           
             @if (!string.IsNullOrEmpty(Model.FileName))
             {
-                <img src="/images/@Model.FileName" width="200" height="200" />
+                var fileType = Model.FileName.Split('.')[1];
+                if (fileType.ToLower() == "jpg" || fileType.ToLower()== "jpeg" || fileType.ToLower() == "png"){
+                    <img src="/images/@Model.FileName" width="200" height="200" />
+                }else{
+                        <a onclick="OpenFile('@Model.FileName')" class="note-attachments pointer-event"><i class="fa fa-picture-o" style="color:green"></i> file :- @Model.FileName</a>
+                }
             }
         </div>
    }
 </div>
-
+<script>
+    function OpenFile(fileName) {
+        window.open("/Notes/OpenFile?fileName=" + fileName)
+    }
+</script>
 <script src="~/js/Notes/noteaddeditview.js"></script>
 @*
 <script>
